@@ -65,6 +65,7 @@ func (suite *ViewTestSuite) TestGetV6() {
 		},
 		1: {
 			{Network: "tcp6", Address: "[2001:b28:f23d:f001::a]:443"},
+			{Network: "tcp6", Address: "[2001:b28:f23d:f001::e]:443"},
 		},
 	}
 
@@ -73,6 +74,13 @@ func (suite *ViewTestSuite) TestGetV6() {
 			assert.ElementsMatch(t, addresses, suite.view.getV6(dc))
 		})
 	}
+}
+
+func (suite *ViewTestSuite) TestGetV6PrimaryFirst() {
+	suite.Equal([]Addr{
+		{Network: "tcp6", Address: "[2001:67c:04e8:f004::a]:443"},
+		{Network: "tcp6", Address: "[2001:67c:04e8:f004::b]:443"},
+	}, suite.view.getV6(4))
 }
 
 func TestView(t *testing.T) {
