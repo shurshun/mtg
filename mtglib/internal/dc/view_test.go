@@ -76,11 +76,13 @@ func (suite *ViewTestSuite) TestGetV6() {
 	}
 }
 
-func (suite *ViewTestSuite) TestGetV6PrimaryFirst() {
-	suite.Equal([]Addr{
-		{Network: "tcp6", Address: "[2001:67c:04e8:f004::a]:443"},
-		{Network: "tcp6", Address: "[2001:67c:04e8:f004::b]:443"},
-	}, suite.view.getV6(4))
+func (suite *ViewTestSuite) TestGetV6FallbackLast() {
+	for range 100 {
+		suite.Equal([]Addr{
+			{Network: "tcp6", Address: "[2001:67c:04e8:f004::a]:443"},
+			{Network: "tcp6", Address: "[2001:67c:04e8:f004::b]:443"},
+		}, suite.view.getV6(4))
+	}
 }
 
 func TestView(t *testing.T) {

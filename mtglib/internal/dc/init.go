@@ -42,13 +42,17 @@ type Updater interface {
 }
 
 // https://github.com/telegramdesktop/tdesktop/blob/master/Telegram/SourceFiles/mtproto/mtproto_dc_options.cpp#L30
-var defaultDCAddrSet = (func() dcAddrSet {
+var defaultDCAddrSet = newDCAddrSet(essentials.TelegramCoreAddresses)
+
+var fallbackDCAddrSet = newDCAddrSet(essentials.TelegramFallbackAddresses)
+
+func newDCAddrSet(addresses map[int][]string) dcAddrSet {
 	addrSet := dcAddrSet{
 		v4: make(map[int][]Addr),
 		v6: make(map[int][]Addr),
 	}
 
-	for dcid, ips := range essentials.TelegramCoreAddresses {
+	for dcid, ips := range addresses {
 		for _, addr := range ips {
 			host, _, err := net.SplitHostPort(addr)
 			if err != nil {
@@ -74,4 +78,4 @@ var defaultDCAddrSet = (func() dcAddrSet {
 	}
 
 	return addrSet
-})()
+}
